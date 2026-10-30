@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Workspace {
+  id            String   @id @default(cuid())
+  name          String
+  profileMediaId String? // media asset id for profile image
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  nodes  Node[]
+  media  MediaAsset[]
+
+  @@index([profileMediaId])
+}
+
+model Node {
+  id          String   @id @default(cuid())
+  workspaceId String
+  parentId    String?  // null = root of workspace
+  name        String
+  type        String   // "FOLDER" | "FILE"
+  content     String?  // JSON: spreadsheet structure for FILE type
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([parentId])
+  @@index([workspaceId, parentId])
+}
+
+model MediaAsset {
+  id          String   @id @default(cuid())
+  workspaceId String
+  filename    String
+  mimeType    String
+  size        Int
+  ext         String
+  createdAt   DateTime @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+}

@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# build output
+.next/
+out/
+dist/
+build/
+
+# runtime data / local DB
+*.db
+*.db-journal
+db/
+storage/
+tmp/
+*.log
+dev.log
+server.log
+
+# env
+.env
+.env.*
+!.env.example
+
+# editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# misc
+.cache/
+coverage/
+
+# not needed to host the app
+skills/
+examples/
+tests/
+download/
+.zscripts/
+mini-services/
+tailwind.config.ts
